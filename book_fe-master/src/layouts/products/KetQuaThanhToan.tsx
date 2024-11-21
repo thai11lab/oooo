@@ -17,7 +17,13 @@ function KetQuaThanhToan() {
     const [trangThai, setTrangThai] = useState<boolean>(false);
     const navigate = useNavigate();
     useEffect(() => {
-        fetch("http://localhost:8080/api/don-hang/vnpay-payment", {
+        // Lấy phần chuỗi sau dấu "?" trong URL
+        const queryString = window.location.search;
+
+        // In chuỗi tham số ra console
+        console.log(queryString);       
+
+        fetch("http://localhost:8080/api/don-hang/vnpay-payment"+queryString, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('jwt')}`,

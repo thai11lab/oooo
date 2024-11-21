@@ -224,7 +224,7 @@ function ThanhToan() {
                                                     </div>
                                                     <button className="btn bg-dark text-white"
                                                         onClick={()=>{
-                                                            fetch('http://localhost:8080/api/don-hang/submitOrder?amount='+donHang.tongTien+'&orderInfo=ssss', {
+                                                            fetch('http://localhost:8080/api/don-hang/submitOrder?amount='+donHang.tongTien+'&orderInfo='+donHang.maDonHang, {
                                                                 method: "GET",
                                                                 headers: {
                                                                     "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
