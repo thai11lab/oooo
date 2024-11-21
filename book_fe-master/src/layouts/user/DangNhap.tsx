@@ -28,7 +28,13 @@ const DangNhap = () => {
         // Lưu JWT vào localStorage
         localStorage.setItem('jwt', data.jwt);
         setError("Đăng nhập thành công!");
-        navigate('/'); // Chuyển hướng về trang chủ
+        if(localStorage.getItem("nextPay") ==="true"){
+          localStorage.removeItem("nextPay");
+          navigate('/thanh-toan'); 
+        }else{
+          navigate('/'); // Chuyển hướng về trang chủ
+        }
+       
         window.location.reload(); // Reload để cập nhật state
       } else {
         throw new Error("Đăng nhập thất bại!");

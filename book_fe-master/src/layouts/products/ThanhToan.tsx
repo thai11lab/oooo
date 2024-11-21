@@ -13,8 +13,10 @@ interface SanPhamGioHang {
     hinhAnh?: string;
 }
 
-function GioHang() {
+function ThanhToan() {
     const [gioHang, setGioHang] = useState<SanPhamGioHang[]>([]);
+
+    const [donHang, setDonHang] = useState<any>();
     const navigate = useNavigate();
     useEffect(() => {
         const loadGioHangWithImages = async () => {
@@ -28,7 +30,7 @@ function GioHang() {
                             const images = await getOneImageOfOneBook(item.maSach);
                             return {
                                 ...item,
-                                hinhAnh: images[0]?.dataImage || ''
+                                hinhAnh: images[0]?.urlHinh || ''
                             };
                         } catch (error) {
                             console.error('Error loading image:', error);
@@ -42,6 +44,47 @@ function GioHang() {
         };
 
         loadGioHangWithImages();
+        
+        const storedData = localStorage.getItem('gioHang');
+
+        // Kiểm tra xem có dữ liệu không
+        if (storedData) {
+            // Chuyển đổi dữ liệu từ JSON string thành object
+            const data = JSON.parse(storedData);
+
+            // Sử dụng map() để chuyển đổi cấu trúc dữ liệu
+            const result = data.map((item: { maSach: any; soLuong: any; }) => ({
+                maSach: item.maSach,
+                soLuong: item.soLuong
+            }));
+
+            // In kết quả
+            fetch("http://localhost:8080/api/don-hang/them", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+                },
+                body: JSON.stringify(result),
+            })
+                .then( (response) => {
+                    console.log("Status:", response.status);
+    
+                 
+                    return response.json();
+                })
+                .then((response) => {
+                    console.log(response);
+                    setDonHang(response);
+                })
+                .catch((error) => {
+                    console.error("Lỗi:", error);
+                    
+                });
+        } else {
+        console.log("Không có dữ liệu trong localStorage");
+        }
+        
     }, []);
 
     return (
@@ -50,13 +93,13 @@ function GioHang() {
                 <div className="col-12">
                     <div className="card shadow-sm">
                         <div className="card-header bg-dark text-white">
-                            <h4 className="mb-0">Giỏ hàng của bạn</h4>
+                            <h4 className="mb-0">Đơn hàng của bạn</h4>
                         </div>
                         <div className="card-body">
                             {gioHang.length === 0 ? (
                                 <div className="text-center py-5">
                                     <i className="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                                    <h5 className="text-muted">Giỏ hàng trống</h5>
+                                    <h5 className="text-muted">Không có đơn hàng</h5>
                                     <Link to="/" className="btn bg-dark mt-3">
                                         Tiếp tục mua sắm
                                     </Link>
@@ -181,22 +224,22 @@ function GioHang() {
                                                     </div>
                                                     <button className="btn bg-dark text-white"
                                                         onClick={()=>{
-                                                            // eslint-disable-next-line no-restricted-globals
-                                                            if(localStorage.getItem('jwt')){
-                                                                navigate(`/thanh-toan`);
-                                                            }else{
-                                                                // eslint-disable-next-line no-restricted-globals
-                                                                const result = confirm("Bạn có muốn đăng nhập để thanh toán ?");
-                                                                if (result) {
-                                                                // Thực hiện hành động nếu người dùng bấm "OK
-                                                                     localStorage.setItem('nextPay',"true")
-                                                                     navigate(`/dang-nhap`);
-                                                                } 
-                                                            }
-                                                            
+                                                            fetch('http://localhost:8080/api/don-hang/submitOrder?amount='+donHang.tongTien+'&orderInfo=ssss', {
+                                                                method: "GET",
+                                                                headers: {
+                                                                    "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+                                                                },
+                                                            })
+                                                            .then((response) => response.text())  // Nếu API trả về chuỗi JSON, dùng .json()
+                                                            .then((data) => {
+                                                                window.location.href = data;
+                                                            })
+                                                            .catch((error) => {
+                                                                console.error("Lỗi:", error);
+                                                            });
                                                         }}
                                                     >
-                                                        Thanh toán ngay
+                                                        Thanh toán VNPAY
                                                         <i className="fas fa-arrow-right ms-2"></i>
                                                     </button>
                                                 </div>
@@ -213,4 +256,4 @@ function GioHang() {
     );
 }
 
-export default GioHang;
+export default ThanhToan;

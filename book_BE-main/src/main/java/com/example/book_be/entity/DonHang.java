@@ -1,5 +1,6 @@
 package com.example.book_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,21 +29,29 @@ public class DonHang {
     private double chiPhiThanhToan;
 
     private double tongTien;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "donHang", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     private List<ChiTietDonHang> danhSachChiTietDonHang;
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST
     })
+    @JsonIgnore
     @JoinColumn(name = "ma_nguoi_dung", nullable = false)
     private NguoiDung nguoiDung;
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST
     })
+    @JsonIgnore
     @JoinColumn(name = "ma_hinh_thuc_thanh_toan")
     private HinhThucThanhToan hinhThucThanhToan;
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST
     })
+    @JsonIgnore
     @JoinColumn(name = "ma_hinh_thuc_giao_hang")
     private HinhThucGiaoHang hinhThucGiaoHang;
+
+    @Column(name = "trang_thai_thanh_toan")
+    private Integer trangThaiThanhToan;
 }

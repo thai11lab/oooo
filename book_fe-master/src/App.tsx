@@ -15,6 +15,8 @@ import GioHang from "./layouts/products/GioHang";
 import { ProtectedRoute } from "./layouts/utils/ProtectedRoute";
 import HomePage from "./layouts/homepage/HomePage";
 import { ToastContainer } from "react-toastify";
+import ThanhToan from "./layouts/products/ThanhToan";
+import KetQuaThanhToan from "./layouts/products/KetQuaThanhToan";
 // import { ToastContainer } from 'react-toastify';
 
 
@@ -41,6 +43,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/sach/:maSach" element={<ChiTietSanPham />} />
               <Route path="/dang-ky" element={<DangKyNguoiDung />} />
+              <Route path="/thanh-toan" element={<ThanhToan />} />
+              <Route path="/xu-ly-kq-thanh-toan" element={<KetQuaThanhToan />} />
               <Route
                 path="/kich-hoat/:email/:maKichHoat"
                 element={<KichHoatTaiKhoan />}

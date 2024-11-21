@@ -53,8 +53,8 @@ const SachProps: React.FC<SachPropsInterface> = (props) => {
   }
 
   let duLieuAnh: string = "";
-  if (danhSachAnh[0] && danhSachAnh[0].dataImage) {
-    duLieuAnh = danhSachAnh[0].dataImage;
+  if (danhSachAnh[0] && danhSachAnh[0].urlHinh) {
+    duLieuAnh = danhSachAnh[0]?.urlHinh;
   }
 
   return (

@@ -56,7 +56,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/admin/sach/insert").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/admin/sach/update/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/admin/sach/findImage/**").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/api/don-hang/them").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/don-hang/submitOrder**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/don-hang/vnpay-payment").permitAll()
         );
 
         // Cấu hình CORS

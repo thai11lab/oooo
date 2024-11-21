@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        NguoiDung nguoiDung = findByUsername(username);
+        List<NguoiDung> nguoiDungs = nguoiDungRepository.findAll((root, query, criteriaBuilder) -> criteriaBuilder.equal(
+                root.get("tenDangNhap"),username
+        ));
+        NguoiDung nguoiDung = nguoiDungs.stream().findFirst().orElse(null);
 
         if (nguoiDung == null) {
             throw new UsernameNotFoundException("Tài khoản không tồn tại!");
