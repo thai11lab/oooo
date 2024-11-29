@@ -59,6 +59,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/don-hang/them").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/don-hang/submitOrder**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/don-hang/vnpay-payment").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/don-hang/findAll**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/don-hang/cap-nhat-trang-thai-giao-hang/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/danh-gia/**").permitAll()
         );
 
         // Cấu hình CORS

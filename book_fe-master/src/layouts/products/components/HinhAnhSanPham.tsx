@@ -57,7 +57,7 @@ const HinhAnhSanPham: React.FC<HinhAnhSanPhamProps> = ({ maSach, className, styl
           {danhSachAnh.map((hinhAnh, index) => (
             <div key={index}>
               <img
-                src={hinhAnh.dataImage}
+                src={hinhAnh.urlHinh}
                 alt={`${hinhAnh.tenHinhAnh}`}
                 style={{ maxWidth: "250px" }}
               />

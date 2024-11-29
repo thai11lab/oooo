@@ -48,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
         DonHang donHang = new DonHang();
         donHang.setNgayTao(new Date());
         donHang.setDiaChiMuaHang(nguoiDung.getDiaChiMuaHang());
+        donHang.setDiaChiNhanHang(nguoiDung.getDiaChiGiaoHang());
         donHang.setNguoiDung(nguoiDung);
         donHang.setTrangThaiThanhToan(0);
 

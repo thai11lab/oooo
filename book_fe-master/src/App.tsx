@@ -17,6 +17,7 @@ import HomePage from "./layouts/homepage/HomePage";
 import { ToastContainer } from "react-toastify";
 import ThanhToan from "./layouts/products/ThanhToan";
 import KetQuaThanhToan from "./layouts/products/KetQuaThanhToan";
+import DonHangUser from "./layouts/products/DonHangUser";
 // import { ToastContainer } from 'react-toastify';
 
 
@@ -45,6 +46,7 @@ function App() {
               <Route path="/dang-ky" element={<DangKyNguoiDung />} />
               <Route path="/thanh-toan" element={<ThanhToan />} />
               <Route path="/xu-ly-kq-thanh-toan" element={<KetQuaThanhToan />} />
+              <Route path="/order" element={<DonHangUser />} />
               <Route
                 path="/kich-hoat/:email/:maKichHoat"
                 element={<KichHoatTaiKhoan />}

@@ -30,6 +30,9 @@ public class DonHang {
 
     private double tongTien;
 
+
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "donHang", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     private List<ChiTietDonHang> danhSachChiTietDonHang;
@@ -54,4 +57,7 @@ public class DonHang {
 
     @Column(name = "trang_thai_thanh_toan")
     private Integer trangThaiThanhToan;
+
+    @Column(name = "trang_thai_giao_hang")
+    private Integer trangThaiGiaoHang;
 }

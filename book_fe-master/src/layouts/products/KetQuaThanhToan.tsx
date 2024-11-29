@@ -40,7 +40,7 @@ function KetQuaThanhToan() {
         .catch((error) => {
             console.error("Lỗi:", error);
         });
-    }, []);
+    }, []); 
 
     return (
         <div className="container py-5">

@@ -70,7 +70,12 @@ function ThanhToan() {
                 .then( (response) => {
                     console.log("Status:", response.status);
     
-                 
+                    if(response.status === 401){
+                        alert("Bạn đã hết phiên trên website.Vui lòng đăng nhập lại");
+                        navigate("/dang-nhap");     
+                        return;
+                    }
+                    
                     return response.json();
                 })
                 .then((response) => {

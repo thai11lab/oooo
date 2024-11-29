@@ -203,6 +203,11 @@ function Navbar({ tuKhoaTimKiem, setTuKhoaTimKiem }: NavbarProps) {
                     </NavLink>
                   </li>
                   <li>
+                    <NavLink to="/order" className="dropdown-item">
+                      <i className="fas fa-user me-2"></i>Đơn hàng của tôi
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/settings" className="dropdown-item">
                       <i className="fas fa-cog me-2"></i>Cài đặt
                     </NavLink>

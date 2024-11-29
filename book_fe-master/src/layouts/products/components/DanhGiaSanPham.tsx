@@ -77,16 +77,16 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
     );
   }
 
-  if (danhSachDanhGia.length === 0) {
-    return (
-      <div className="text-center my-4">
-        <div className="alert alert-info" role="alert">
-          <i className="fas fa-info-circle me-2"></i>
-          Chưa có đánh giá nào cho sản phẩm này
-        </div>
-      </div>
-    );
-  }
+  // if (danhSachDanhGia.length === 0) {
+  //   return (
+  //     <div className="text-center my-4">
+  //       <div className="alert alert-info" role="alert">
+  //         <i className="fas fa-info-circle me-2"></i>
+  //         Chưa có đánh giá nào cho sản phẩm này
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
 
 
@@ -125,6 +125,27 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
             <button 
               type="submit" 
               className="btn btn-primary"
+              onClick={async ()=>{
+                await fetch("http://localhost:8080/api/danh-gia/them-danh-gia/"+maSach, {
+                  method: "POST",
+                  headers: {
+                      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+                  },
+                  body: JSON.stringify(danhGiaMoi),
+              })
+                  .then( (response) => {
+                     
+                      return response.json();
+                  })
+                  .then((response) => {
+                    
+                    
+                  })
+                  .catch((error) => {
+                      console.error("Lỗi:", error);
+                      
+                  });  
+              }}
               disabled={dangGuiDanhGia}
             >
               {dangGuiDanhGia ? (

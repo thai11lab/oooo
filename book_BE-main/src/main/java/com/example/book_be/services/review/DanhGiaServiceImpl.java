@@ -33,4 +33,20 @@ public class DanhGiaServiceImpl implements DanhGiaService {
                 () -> new RuntimeException("Không tìm thấy sách")));
         return suDanhGiaRepository.save(suDanhGia);
     }
+
+    @Override
+    public SuDanhGia updateReview(Long maDanhGia, SuDanhGia danhGia) {
+        SuDanhGia db = suDanhGiaRepository.findById(maDanhGia).orElse(null);
+        db.setDiemXepHang(danhGia.getDiemXepHang());
+        db.setNhanXet(danhGia.getNhanXet());
+        db.setTimestamp(new Timestamp(System.currentTimeMillis()));
+        return suDanhGiaRepository.save(db);
+    }
+
+    @Override
+    public SuDanhGia deleteReview(Long maDanhGia) {
+        SuDanhGia db = suDanhGiaRepository.findById(maDanhGia).orElse(null);
+        suDanhGiaRepository.delete(db);
+        return db;
+    }
 }
