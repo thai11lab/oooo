@@ -42,7 +42,8 @@ public class OrderServiceImpl implements OrderService {
         }
         NguoiDung finalNguoiDung = nguoiDung;
         List<DonHang> donHangs = this.donHangRepository.findAll((root, query, builder) -> builder.and(
-                builder.equal(root.get("nguoiDung").get("maNguoiDung"), finalNguoiDung.getMaNguoiDung())
+                builder.equal(root.get("nguoiDung").get("maNguoiDung"), finalNguoiDung.getMaNguoiDung()),
+                builder.equal(root.get("trangThaiThanhToan"), 0)
         ));
         donHangRepository.deleteAll(donHangs);
         DonHang donHang = new DonHang();

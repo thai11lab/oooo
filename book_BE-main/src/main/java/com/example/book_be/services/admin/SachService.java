@@ -16,4 +16,8 @@ public interface SachService {
     Sach delete(Long id);
 
     Sach findById(Long id);
+
+    Sach active(Long id);
+
+    Sach unactive(Long id);
 }

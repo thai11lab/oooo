@@ -10,8 +10,10 @@ const AdminSidebar = () => {
 
   useEffect(() => {
     if (jwt) {
+
       const decodedJwt = JSON.parse(atob(jwt.split('.')[1]));
       setUserInfo(decodedJwt);
+      
     }
   }, [jwt]);
 
@@ -139,6 +141,7 @@ const AdminSidebar = () => {
             </li>
 
             {/* Quản lý đơn hàng */}
+            {userInfo?.isAdmin ?
             <li className="nav-item">
               <div className="nav-link text-white" style={{cursor: 'pointer'}} onClick={() => toggleSubMenu('donhang')}>
                 <i className="fas fa-shopping-cart me-2"></i>
@@ -148,12 +151,6 @@ const AdminSidebar = () => {
               {openSubMenu === 'donhang' && (
                 <ul className="nav flex-column ms-3">
                   <li className="nav-item">
-                    <NavLink to="/quan-ly/don-hang-moi" className="nav-link text-white">
-                      <i className="fas fa-plus me-2"></i>
-                      Đơn hàng mới
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
                     <NavLink to="/quan-ly/danh-sach-don-hang" className="nav-link text-white">
                       <i className="fas fa-list me-2"></i>
                       Danh sách đơn hàng
@@ -161,11 +158,10 @@ const AdminSidebar = () => {
                   </li>
                 </ul>
               )}
-            </li>
-
+            </li>:""
+}
             {/* Các menu khác tương tự */}
-            
-            <li className="nav-item">
+            {userInfo?.isAdmin ?<li className="nav-item">
               <div className="nav-link text-white" style={{cursor: 'pointer'}} onClick={() => toggleSubMenu('nguoidung')}>
                 <i className="fas fa-users me-2"></i>
                 Quản lý người dùng
@@ -173,16 +169,28 @@ const AdminSidebar = () => {
               </div>
               {openSubMenu === 'nguoidung' && (
                 <ul className="nav flex-column ms-3">
-                  <li className="nav-item">
-                    <NavLink to="/quan-ly/them-nguoi-dung" className="nav-link text-white">
-                      <i className="fas fa-user-plus me-2"></i>
-                      Thêm người dùng
-                    </NavLink>
-                  </li>
+                
                   <li className="nav-item">
                     <NavLink to="/quan-ly/danh-sach-nguoi-dung" className="nav-link text-white">
                       <i className="fas fa-list me-2"></i>
                       Danh sách người dùng
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
+            </li> : "" }
+            <li className="nav-item">
+              <div className="nav-link text-white" style={{cursor: 'pointer'}} onClick={() => toggleSubMenu('binhluan')}>
+                <i className="fas fa-book me-2"></i>
+                Quản lý bình luận
+                <i className={`fas fa-chevron-${openSubMenu === 'binhluan' ? 'down' : 'right'} float-end mt-1`}></i>
+              </div>
+              {openSubMenu === 'binhluan' && (
+                <ul className="nav flex-column ms-3">
+                  <li className="nav-item">
+                    <NavLink to="danh-sach-binh-luan" className="nav-link text-white">
+                      <i className="fas fa-list me-2"></i>
+                      Quản lý bình luận
                     </NavLink>
                   </li>
                 </ul>

@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PhanTrang } from '../../../utils/PhanTrang';
 import {getAllBook, xoaSach,findAll} from "../../../../api/SachApi";
 
-export default function DanhSachSach() {
-  const [danhSachSach, setDanhSachSach] = useState<SachModel[]>([]);
+export default function DanhSachBinhLuan() {
+  const [binhLuanList, setBinhLuanList] = useState<any[]>([]);
   const [dangTaiDuLieu, setDangTaiDuLieu] = useState(true);
   const [baoLoi, setBaoLoi] = useState<string | null>(null);
   const [trangHienTai, setTrangHienTai] = useState(1);
@@ -21,18 +21,31 @@ export default function DanhSachSach() {
       const decodedJwt = JSON.parse(atob(jwt.split('.')[1]));
       setUserInfo(decodedJwt);
     }
-    findAll(trangHienTai - 1)
-      .then((kq) => {
-        console.log(kq)
-        setDanhSachSach(kq.ketQua);
-        setTongSoTrang(kq.tongSoTrang);
-        setDangTaiDuLieu(false);
+     findAll();
+  }, [trangHienTai]);
+
+  const findAll= ()=>{
+    fetch("http://localhost:8080/api/admin/danh-gia/findAll?page="+(trangHienTai-1), {
+      method: "GET",
+      headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+          'Content-Type': 'application/json' 
+      },
+     
+      })
+      .then( (response) => {
+          return response.json();
+      })
+      .then((response) => {
+        setBinhLuanList(response.content);
+        setTongSoTrang(response.totalElements);
+        setDangTaiDuLieu(false)
       })
       .catch((error) => {
-        setBaoLoi(error.message);
-        setDangTaiDuLieu(false);
-      });
-  }, [trangHienTai]);
+          console.error("Lỗi:", error);
+          
+      });  
+  }
 
   const phanTrang = (trang: number) => setTrangHienTai(trang);
 
@@ -58,10 +71,10 @@ export default function DanhSachSach() {
         await xoaSach(maSach);
         alert('Xóa sách thành công!');
         
-        // Tải lại dữ liệu sau khi xóa
-        const kq = await findAll(trangHienTai - 1);
-        setDanhSachSach(kq.ketQua);
-        setTongSoTrang(kq.tongSoTrang);
+
+ 
+       
+
       } catch (error) {
         alert('Có lỗi xảy ra khi xóa sách!');
         console.error('Lỗi xóa sách:', error);
@@ -83,74 +96,49 @@ export default function DanhSachSach() {
 
   return (
     <div className="container-fluid px-4">
-      <h1 className="mt-4">Quản lý sách</h1>
+      <h1 className="mt-4">Quản lý bình luận</h1>
       <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item"><Link to="/quan-ly">Dashboard</Link></li>
-        <li className="breadcrumb-item active">Danh sách sách</li>
+        <li className="breadcrumb-item active">Danh sách bình luận</li>
       </ol>
       <div className="mb-4">
-        {userInfo.isAdmin ? <button
+        <button
             className="btn btn-primary btn-sm me-2"
             onClick={() => handleAdd()}
         >
           Thêm mới <i className="fas fa-add"></i>
-        </button>:""}
+        </button>
         
       </div>
       <div className="card mb-4">
         <div className="card-header">
           <i className="fas fa-table me-1"></i>
-          Danh sách sách
+          Danh sách bình luận
         </div>
         <div className="card-body">
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Mã sách</th>
-                <th>Tên sách</th>
-                <th>Trạng thái</th>
-                <th>Tác giả</th>
-                <th>Giá bán</th>
-                <th>Số lượng</th>
-                <th>Hình ảnh</th>
+                <th>Mã bình luận</th>
+                <th>Nhận xét</th>
+                <th>Điểm xếp hạng</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              {danhSachSach.map((sach) => (
-                <tr key={sach.maSach}>
-                  <td>{sach.maSach}</td>
-                  <td>{sach.tenSach}</td>
-                  <td>{sach.isActive === 1 ? <p className='btn  btn-sm me-2 btn-success'>Mở bán</p>:<p className='btn  btn-sm me-2 btn-danger'>Đóng</p>}</td>
-                  <td>{sach.tenTacGia}</td>
-                  <td>{(sach.giaBan ?? 0).toLocaleString('vi-VN')} đ</td>
-                  <td>{sach.soLuong}</td>
+              {binhLuanList.map((sach) => (
+                <tr key={sach.maDanhGia}>
+                  <td>{sach.maDanhGia}</td>
+                  <td>{sach.nhanXet}</td>
+                  <td>{sach.diemXepHang}</td>
                   <td>
-                    <img width={100} height={100} src={sach.danhSachAnh?.at(0)?.urlHinh} alt="My Image" />
-                  </td>
-                  <td>
-                    {userInfo.isAdmin?<button 
-                      className="btn btn-primary btn-sm me-2"
-                      onClick={() => handleEdit(sach.maSach)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>:""
-                    }
-                    {userInfo.isAdmin?<button 
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(sach.maSach)}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </button>:""
-                    }
-                    <div></div>
-                    {sach.isActive ?
+                  {sach.isActive ?
                         <button
                             className="btn btn-warning btn-sm me-2"
                             onClick={() => {
                               if (window.confirm('Bạn có đóng bán sách này?')) {
                                 try {
-                                   fetch("http://localhost:8080/api/admin/sach/unactive/"+sach.maSach, {
+                                   fetch("http://localhost:8080/api/admin/danh-gia/unactive/"+sach.maDanhGia, {
                                     method: "POST",
                                     headers: {
                                         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
@@ -158,21 +146,8 @@ export default function DanhSachSach() {
                                     },
                                 })
                                     .then( (response) => {
-                                        if(response.status=== 401){
-                                          alert("Đăng nhập để đánh giá");
-                                          return;
-                                        }
-                                        findAll(trangHienTai - 1)
-                                        .then((kq) => {
-                                          console.log(kq)
-                                          setDanhSachSach(kq.ketQua);
-                                          setTongSoTrang(kq.tongSoTrang);
-                                          setDangTaiDuLieu(false);
-                                        })
-                                        .catch((error) => {
-                                          setBaoLoi(error.message);
-                                          setDangTaiDuLieu(false);
-                                        });
+                                      findAll();
+                             
                                     })
                                     .catch((error) => {
                                       
@@ -193,7 +168,7 @@ export default function DanhSachSach() {
                             onClick={() => {
                               if (window.confirm('Bạn có muốn mở sách này?')) {
                                 try {
-                                    fetch("http://localhost:8080/api/admin/sach/active/"+sach.maSach, {
+                                    fetch("http://localhost:8080/api/admin/danh-gia/active/"+sach.maDanhGia, {
                                       method: "POST",
                                       headers: {
                                           "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
@@ -201,17 +176,7 @@ export default function DanhSachSach() {
                                       },
                                     })
                                     .then( (response) => {
-                                      findAll(trangHienTai - 1)
-                                      .then((kq) => {
-                                        console.log(kq)
-                                        setDanhSachSach(kq.ketQua);
-                                        setTongSoTrang(kq.tongSoTrang);
-                                        setDangTaiDuLieu(false);
-                                      })
-                                      .catch((error) => {
-                                        setBaoLoi(error.message);
-                                        setDangTaiDuLieu(false);
-                                      });
+                                      findAll();
                                     })
                                     .catch((error) => {
                                         console.error("Lỗi:", error);
@@ -228,7 +193,6 @@ export default function DanhSachSach() {
                         </button>
                         
                         }
-                    
                   </td>
                 </tr>
               ))}

@@ -44,24 +44,33 @@ public class SecurityConfiguration {
         // Cấu hình phân quyền cho endpoint
         http.authorizeHttpRequests(
                 config -> config
+
                         .requestMatchers(HttpMethod.GET, Endpoints.PUBLIC_GET_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.PUT, Endpoints.PUBLIC_PUT_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.DELETE, Endpoints.PUBLIC_DELETE_ENDPOINS).permitAll()
                         .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_GET_ENDPOINS).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINS).permitAll()
+
                         .requestMatchers(HttpMethod.PUT, Endpoints.ADMIN_PUT_ENDPOINS).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, Endpoints.ADMIN_DELETE_ENDPOINS).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/danh-gia/them-danh-gia").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/admin/sach/insert").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/admin/sach/update/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/admin/sach/findImage/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/admin/quyen/findAll").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/don-hang/them").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/don-hang/submitOrder**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/don-hang/vnpay-payment").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/don-hang/findAll**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/don-hang/cap-nhat-trang-thai-giao-hang/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/danh-gia/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/danh-gia/findAll**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/danh-gia/them-danh-gia-v1").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/user/phan-quyen").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/sach/active/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/sach/unactive/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/sach**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/admin/danh-gia/findAll**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/danh-gia/active/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/danh-gia/unactive/**").permitAll()
         );
 
         // Cấu hình CORS

@@ -39,7 +39,8 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
   const [baoLoi, setBaoLoi] = useState<string | null>(null);
   const [danhGiaMoi, setDanhGiaMoi] = useState({
     diemXepHang: 5,
-    nhanXet: ""
+    nhanXet: "",
+    maSach:0
   });
   const [dangGuiDanhGia, setDangGuiDanhGia] = useState(false);
   const navigate = useNavigate();
@@ -77,16 +78,16 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
     );
   }
 
-  // if (danhSachDanhGia.length === 0) {
-  //   return (
-  //     <div className="text-center my-4">
-  //       <div className="alert alert-info" role="alert">
-  //         <i className="fas fa-info-circle me-2"></i>
-  //         Chưa có đánh giá nào cho sản phẩm này
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (danhSachDanhGia.length === 0) {
+    return (
+      <div className="text-center my-4">
+        <div className="alert alert-info" role="alert">
+          <i className="fas fa-info-circle me-2"></i>
+          Chưa có đánh giá nào cho sản phẩm này
+        </div>
+      </div>
+    );
+  }
 
 
 
@@ -126,20 +127,33 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
               type="submit" 
               className="btn btn-primary"
               onClick={async ()=>{
-                await fetch("http://localhost:8080/api/danh-gia/them-danh-gia/"+maSach, {
+                danhGiaMoi.maSach = maSach;
+                await fetch("http://localhost:8080/api/danh-gia/them-danh-gia-v1", {
                   method: "POST",
                   headers: {
                       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+                      'Content-Type': 'application/json' 
                   },
                   body: JSON.stringify(danhGiaMoi),
               })
                   .then( (response) => {
-                     
+                      if(response.status=== 401){
+                        alert("Đăng nhập để đánh giá");
+                        return;
+                      }
                       return response.json();
                   })
                   .then((response) => {
-                    
-                    
+                    alert("Bạn đã đánh giá xong");
+                    getAllReviewOfOneBook(maSach)
+                      .then((danhGia) => {
+                        setDanhSachDanhGia(danhGia);
+                        setDangTaiDuLieu(false);
+                      })
+                      .catch((error) => {
+                        setDangTaiDuLieu(false);
+                        setBaoLoi(error.message);
+                      });
                   })
                   .catch((error) => {
                       console.error("Lỗi:", error);
@@ -164,7 +178,7 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
       <h3 className="mb-4">
         <i className="fas fa-comments me-2"></i>
         Đánh giá từ khách hàng
-      </h3>
+      </h3><div className="00000000000000000000000000"></div>
       <div className="review-list">
         {danhSachDanhGia.map((danhGia) => (
           <div key={danhGia.maDanhGia} className="review-item card mb-3">

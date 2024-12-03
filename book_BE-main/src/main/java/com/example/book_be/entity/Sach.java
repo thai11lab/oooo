@@ -33,9 +33,8 @@ public class Sach {
     private String ISBN;
 
 
-    @Column(name = "image")
-    @Lob
-    private String image;
+    @Column(name = "is_active")
+    private Integer isActive;
     //    @Column(name = "ma_sach")
 //    private int soldQuantity;
 //    @Column(name = "ma_sach")// Đã bán bao nhiêu
@@ -45,12 +44,16 @@ public class Sach {
     List<TheLoai> listTheLoai;
     @OneToMany(mappedBy = "sach", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     List<HinhAnh> listHinhAnh;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "sach", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     List<SuDanhGia> listDanhGia;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sach", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     List<ChiTietDonHang> listChiTietDonHang;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "sach", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<SachYeuThich> listSachYeuThich;
 

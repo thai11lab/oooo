@@ -61,7 +61,10 @@ public class DonHangController {
         NguoiDung finalNguoiDung = nguoiDung;
         return donHangRepository.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(builder.equal(root.get("nguoiDung").get("maNguoiDung"), finalNguoiDung.getMaNguoiDung()));
+            if(authentication.getAuthorities().contains("ADMIN") || authentication.getAuthorities().contains("USER")){
+                predicates.add(builder.equal(root.get("nguoiDung").get("maNguoiDung"), finalNguoiDung.getMaNguoiDung()));
+            }
+
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
     }

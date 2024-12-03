@@ -1,5 +1,6 @@
 package com.example.book_be.controller.admin;
 
+import com.example.book_be.bo.PhanQuyenBo;
 import com.example.book_be.bo.UserBo;
 import com.example.book_be.entity.NguoiDung;
 import com.example.book_be.services.admin.AdminUserService;
@@ -29,8 +30,11 @@ public class UserController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    public static void main(String[] args) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode("123456"));
+    @PostMapping("/phan-quyen")
+    public void phanQuuyen(@RequestBody PhanQuyenBo phanQuyenBo) {
+        adminUserService.phanQuyen(phanQuyenBo);
     }
+
+
+
 }

@@ -13,11 +13,11 @@ async function laySach(duongDan: string): Promise<KetQuaInterface> {
   const response = await my_request(duongDan);
 
   // Lấy ra json sách
-  const responseData = response._embedded.saches;
+  const responseData = response.content;
 
   // Lấy thông tin trang
-  const tongSoTrang: number = response.page.totalPages;
-  const tongSoSach: number = response.page.totalElements;
+  const tongSoTrang: number = response.totalPages;
+  const tongSoSach: number = response.totalElements;
 
   for (const key in responseData) {
     ketQua.push({
@@ -38,7 +38,7 @@ export async function getAllBook(
   trangHienTai: number
 ): Promise<KetQuaInterface> {
   // Xác định endpoint
-  const duongDan: string = `http://localhost:8080/sach?sort=maSach,desc&size=8&page=${trangHienTai}`;
+  const duongDan: string = `http://localhost:8080/api/sach?page=${trangHienTai}`;
   return laySach(duongDan);
 }
 export async function get3NewBook(): Promise<KetQuaInterface> {
@@ -209,6 +209,7 @@ export async function findAll(trangHienTai: number): Promise<KetQuaInterface> {
       moTa: responseData[key].moTa,
       soLuong: responseData[key].soLuong,
       tenTacGia: responseData[key].tenTacGia,
+      isActive:responseData[key].isActive,
       trungBinhXepHang: responseData[key].trungBinhXepHang,
       danhSachAnh: responseData[key].listHinhAnh,
     });

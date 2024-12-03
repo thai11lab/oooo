@@ -34,6 +34,9 @@ public class SachServiceImpl implements SachService {
         Pageable pageable = PageRequest.of(model.getPage(), model.getPageSize());
         Page<Sach> sachPage = sachRepository.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
+            if(Boolean.FALSE.equals(model.getIsAdmin())){
+                predicates.add(builder.equal(root.get("isActive"),1));
+            }
             query.orderBy(builder.desc(root.get("maSach")));
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
@@ -97,5 +100,21 @@ public class SachServiceImpl implements SachService {
     @Override
     public Sach findById(Long id) {
         return null;
+    }
+
+    @Override
+    public Sach active(Long id) {
+        Sach sach = sachRepository.findById(id).orElse(null);
+        sach.setIsActive(1);
+        sachRepository.save(sach);
+        return sach;
+    }
+
+    @Override
+    public Sach unactive(Long id) {
+        Sach sach = sachRepository.findById(id).orElse(null);
+        sach.setIsActive(0);
+        sachRepository.save(sach);
+        return sach;
     }
 }

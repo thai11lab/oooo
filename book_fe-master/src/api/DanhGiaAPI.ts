@@ -10,7 +10,7 @@ async function getAllReviewOfBook(duongDan: string): Promise<DanhGiaModel[]> {
   const response = await my_request(duongDan);
 
   // Lấy ra json sach
-  const responseData = response._embedded.suDanhGias;
+  const responseData = response;
 
   for (const key in responseData) {
     ketQua.push({
@@ -30,7 +30,7 @@ export async function getAllReviewOfOneBook(
   maSach: number
 ): Promise<DanhGiaModel[]> {
   // Xác định endpoint
-  const duongDan: string = `http://localhost:8080/sach/${maSach}/listDanhGia`;
+  const duongDan: string = `http://localhost:8080/api/danh-gia/findAll?maSach=${maSach}`;
 
   return getAllReviewOfBook(duongDan); // Call the correct function with the string
 }
@@ -64,7 +64,7 @@ export async function themDanhGiaMoi(
       token
     });
 
-    const response = await fetch(`http://localhost:8080/api/danh-gia/them-danh-gia`, {
+    const response = await fetch(`http://localhost:8080/api/danh-gia/them-danh-gia-v1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -5,6 +5,8 @@ import SachForm_Admin from '../components/book/SachForm';
 import DanhSachSach from '../components/book/DanhSachSach';
 import CapNhatSach from "../components/book/CapNhatSach";
 import UserComponent from "../components/user";
+import DanhSachBinhLuan from '../components/binhluan/DanhSachBinhLuan';
+import DonHang from '../components/donhang/DonHang';
 
 const AdminLayout: React.FC = () => {
   return (
@@ -17,6 +19,8 @@ const AdminLayout: React.FC = () => {
             <Route path="/them-sach" element={<SachForm_Admin />} />
             <Route path="/cap-nhat-sach/:maSach" element={<CapNhatSach />} />
             <Route path="/danh-sach-nguoi-dung" element={<UserComponent />} />
+            <Route path="/danh-sach-binh-luan" element={<DanhSachBinhLuan />} />
+            <Route path="/danh-sach-don-hang" element={<DonHang />} />
         </Routes>
       </main>
     </div>

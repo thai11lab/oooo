@@ -28,7 +28,7 @@ function GioHang() {
                             const images = await getOneImageOfOneBook(item.maSach);
                             return {
                                 ...item,
-                                hinhAnh: images[0]?.dataImage || ''
+                                hinhAnh: images[0]?.urlHinh || ''
                             };
                         } catch (error) {
                             console.error('Error loading image:', error);

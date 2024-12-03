@@ -1,5 +1,6 @@
 package com.example.book_be.services.admin;
 
+import com.example.book_be.bo.PhanQuyenBo;
 import com.example.book_be.bo.UserBo;
 import com.example.book_be.entity.NguoiDung;
 import com.example.book_be.entity.Sach;
@@ -15,4 +16,6 @@ public interface AdminUserService {
     NguoiDung delete(Long id);
 
     NguoiDung findById(Long id);
+
+    void phanQuyen(PhanQuyenBo phanQuyenBo);
 }

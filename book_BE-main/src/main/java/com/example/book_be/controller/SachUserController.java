@@ -1,8 +1,7 @@
-package com.example.book_be.controller.admin;
+package com.example.book_be.controller;
 
 
 import com.example.book_be.bo.SachBo;
-import com.example.book_be.bo.UserBo;
 import com.example.book_be.dao.HinhAnhRepository;
 import com.example.book_be.entity.HinhAnh;
 import com.example.book_be.entity.Sach;
@@ -17,8 +16,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000/")
-@RequestMapping("/api/admin/sach")
-public class SachController {
+@RequestMapping("/api/sach")
+public class SachUserController {
 
     @Autowired
     private SachService sachService;
@@ -31,7 +30,7 @@ public class SachController {
         SachBo model = new SachBo();
         model.setPage(page);
         model.setPageSize(10);
-        model.setIsAdmin(Boolean.TRUE);
+        model.setIsAdmin(false);
         Page<Sach> result = sachService.findAll(model); // or pass multiple params if needed
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

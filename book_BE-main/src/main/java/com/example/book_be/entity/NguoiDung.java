@@ -38,6 +38,7 @@ public class NguoiDung {
     private String maKichHoat;
     //    private String avatar;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<SuDanhGia> danhSachSuDanhGia;
     @OneToMany(mappedBy = "nguoiDung", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -47,8 +48,12 @@ public class NguoiDung {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name = "nguoidung_quyen", joinColumns = @JoinColumn(name = "ma_nguoi_dung"), inverseJoinColumns = @JoinColumn(name = "ma_quyen"))
     private List<Quyen> danhSachQuyen;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<DonHang> danhSachDonhang;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GioHang> danhSachGioHang;
 

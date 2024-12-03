@@ -13,6 +13,7 @@ class SachModel {
   image?:string;
   danhSachAnh?: HinhAnhModel[];
   listImageStr?:string[];
+  isActive?:number;
 
 
   constructor(
@@ -27,7 +28,8 @@ class SachModel {
     isbn?: string,
     danhSachAnh?: HinhAnhModel[],
     image?:string,
-    listImageStr?:string[]
+    listImageStr?:string[],
+    isActive?:number
   ) {
     this.maSach = maSach;
     this.tenSach = tenSach;
@@ -41,6 +43,7 @@ class SachModel {
     this.danhSachAnh = danhSachAnh;
     this.image = image;
     this.listImageStr = listImageStr;
+    this.isActive = isActive;
   }
 }
 export default SachModel;

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PhanTrang } from '../../../utils/PhanTrang';
 import NguoiDungModel from "../../../../models/NguoiDungModel";
 import {findAll} from "../../../../api/UserApi";
+import { de } from 'date-fns/locale';
 
 export default function UserComponent() {
   const [userList, setUserList] = useState<NguoiDungModel[]>([]);
@@ -12,7 +13,13 @@ export default function UserComponent() {
   const [baoLoi, setBaoLoi] = useState<string | null>(null);
   const [trangHienTai, setTrangHienTai] = useState(1);
   const [tongSoTrang, setTongSoTrang] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState<number>();
+  const [nguoiDung, setNguoiDung] = useState<string>();
+  const [quyenList, setQuyenList] = useState<any[]>([]);
+  const [selectedQuyen, setSelectedQuyen] = useState<any[]>([]);
   const navigate = useNavigate();
+
 
   useEffect(() => {
     findAll(trangHienTai - 1)
@@ -25,6 +32,24 @@ export default function UserComponent() {
           setBaoLoi(error.message);
           setDangTaiDuLieu(false);
         });
+        
+        fetch("http://localhost:8080/api/admin/quyen/findAll", {
+          method: "GET",
+          headers: {
+              "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+              'Content-Type': 'application/json' 
+          },})
+          .then( (response) => {
+              return response.json();
+          })
+          .then((response) => {
+            setQuyenList(response)
+          })
+          .catch((error) => {
+              console.error("Lỗi:", error);
+              
+          });  
+    
   }, [trangHienTai]);
 
   const phanTrang = (trang: number) => setTrangHienTai(trang);
@@ -39,8 +64,23 @@ export default function UserComponent() {
     }
   };
 
+  const handleClose = ()=>{
+    setShowModal(false);
+    setSelectedQuyen([])
+  }
 
+ const handleCheckboxChange = (maQuyen:any) => {
 
+    if (selectedQuyen.includes(maQuyen)) {
+      // Nếu đã chọn, thì bỏ chọn (xóa khỏi danh sách)
+      setSelectedQuyen(selectedQuyen.filter((id) => id !== maQuyen));
+    } else {
+      // Nếu chưa chọn, thì thêm vào danh sách
+      setSelectedQuyen([...selectedQuyen, maQuyen]);
+  
+    }
+    
+  };
   if (dangTaiDuLieu) {
     return <div>Đang tải dữ liệu...</div>;
   }
@@ -70,6 +110,7 @@ export default function UserComponent() {
                 <th>Tên</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -80,6 +121,18 @@ export default function UserComponent() {
                   <td>{user.ten}</td>
                   <td>{user.email}</td>
                   <td>{user.soDienThoai}</td>
+                  <td>
+                    <button 
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => {
+                        setShowModal(true);
+                        setUserId(user.maNguoiDung);
+                        setNguoiDung(user.hoDem +" "+user.ten)
+                      }}
+                    >
+                      Phân quyền
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -91,6 +144,70 @@ export default function UserComponent() {
         tongSoTrang={tongSoTrang}
         phanTrang={phanTrang}
       />
+      {/* Modal */}
+      {showModal && (
+        <div className="modal" style={{ display: 'block' }} role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Phân quyền cho {nguoiDung}</h5>
+              </div>
+              <div className="modal-body">
+                <ul>
+                  {quyenList.map((item) => (
+                    <li key={item?.maQuyen}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={item.maQuyen}
+                          checked={selectedQuyen.includes(item.maQuyen)}
+                          onChange={() => handleCheckboxChange(item.maQuyen)}
+                        />
+                        {item.tenQuyen}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={()=>{
+                    const body = {
+                        userId: userId,
+                        quyenIds:selectedQuyen
+                    };
+                    fetch("http://localhost:8080/api/admin/user/phan-quyen", {
+                      method: "POST",
+                      body: JSON.stringify(body),
+                      headers: {
+                          "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+                          'Content-Type': 'application/json' 
+                      },})
+                      .then( (response) => {
+                        if(response.status === 200){
+                          alert("Thêm quyền thành công");
+                          setShowModal(false);
+                        }
+                      })
+                      
+                      .catch((error) => {
+                          console.error("Lỗi:", error);
+                          
+                      }); 
+                }}>
+                  Lưu
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleClose}
+                >
+                 Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
