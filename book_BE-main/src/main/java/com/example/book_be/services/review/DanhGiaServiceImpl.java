@@ -26,7 +26,7 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         suDanhGia.setNhanXet(nhanXet);
         suDanhGia.setDiemXepHang(diemXepHang);
         suDanhGia.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
+        suDanhGia.setIsActive(1);
         suDanhGia.setNguoiDung(nguoiDungRepository.findById(maNguoiDung).orElseThrow(
                 () -> new RuntimeException("Không tìm thấy người dùng")));
         suDanhGia.setSach(sachRepository.findById(maSach).orElseThrow(

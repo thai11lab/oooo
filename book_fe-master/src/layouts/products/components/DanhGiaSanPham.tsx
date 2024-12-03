@@ -138,13 +138,15 @@ const DanhGiaSanPham: React.FC<DanhGiaSanPhamProps> = ({ maSach }) => {
               })
                   .then( (response) => {
                       if(response.status=== 401){
-                        alert("Đăng nhập để đánh giá");
-                        return;
+                     
+                        return null;
                       }
                       return response.json();
                   })
                   .then((response) => {
-                    alert("Bạn đã đánh giá xong");
+                    if(!response){
+                      alert("Đăng nhập để đánh giá");
+                    }
                     getAllReviewOfOneBook(maSach)
                       .then((danhGia) => {
                         setDanhSachDanhGia(danhGia);
